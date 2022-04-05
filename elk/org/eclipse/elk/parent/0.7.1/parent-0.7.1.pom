@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2019 Kiel University and others.
+  This program and the accompanying materials are made available under the
+  terms of the Eclipse Public License 2.0 which is available at
+  http://www.eclipse.org/legal/epl-2.0.
+  
+  SPDX-License-Identifier: EPL-2.0
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>parent</artifactId>
+  <groupId>org.eclipse.elk</groupId>
+  <name>Eclipse Layout Kernel</name>
+  <url>https://www.eclipse.org/elk/</url>
+  <version>0.7.1</version>
+  <description>An infrastructure for automatic graph layout and implementations of different layout algorithms.</description>
+  <packaging>pom</packaging>
+
+
+  <!-- Define a few properties used throughout all build profiles. -->
+  <properties>
+    <targetJdk>11</targetJdk>
+    <tycho-version>1.7.0</tycho-version>
+    <xtext-version>2.20.0</xtext-version>
+    <elk-version>${project.version}</elk-version>
+
+    <!-- chsch: copied from https://eclipse.googlesource.com/recommenders/org.eclipse.recommenders/+/3dae4575d3370da2da25a1cbce3dfcff198f0611/features/pom.xml -->
+    <!-- Non-breakable space, as normal spaces are trimmed. -->
+    <sourceFeatureLabelSuffix>&#xA0;(Sources)</sourceFeatureLabelSuffix>
+
+    <!-- guarantee that we use utf8 for compilation, this is especially required
+         due to xtend's template symbols («) when running maven on windows. -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+  </properties>
+
+
+  <!-- Define one profile for each output target we have -->
+  <profiles>
+
+    <!-- The ELK Update Site. -->
+    <profile>
+      <id>elk-update-site</id>
+
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <modules>
+        <module>../plugins</module>
+        <module>../features</module>
+        <module>../test</module>
+        <module>org.eclipse.elk.repository</module>
+      </modules>
+    </profile>
+
+    <!-- The Meta Data Language compiler. -->
+    <profile>
+      <id>elk-meta</id>
+
+      <modules>
+        <module>org.eclipse.elk.targetplatform</module>
+        <module>../plugins/org.eclipse.elk.graph</module>
+        <module>../plugins/org.eclipse.elk.core.meta</module>
+      </modules>
+
+      <!-- The meta data language compiler gets pushed to a Maven repository. -->
+      <distributionManagement>
+        <repository>
+          <id>elk-meta-repository</id>
+          <name>ELK Meta Data Language Compiler Repository</name>
+          <url>${elkMeta.publishUrl}</url>
+          <layout>default</layout>
+          <uniqueVersion>false</uniqueVersion>
+        </repository>
+
+        <downloadUrl>${elkMeta.repositoryUrl}</downloadUrl>
+      </distributionManagement>
+    </profile>
+
+    <!-- Activate to have the generated artifacts signed by Eclipse. -->
+    <!-- Only works if the build is run on the Eclipse infrastructure. -->
+    <profile>
+      <id>sign</id>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.cbi.maven.plugins</groupId>
+            <artifactId>eclipse-jarsigner-plugin</artifactId>
+            <version>1.1.5</version>
+            <executions>
+              <execution>
+                <id>sign</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- The Maven publishing configuration. -->
+    <profile>
+      <id>maven-publish</id>
+
+      <distributionManagement>
+        <snapshotRepository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+      </distributionManagement>
+      <build>
+        <plugins>
+          <!-- Create GPG signatures. -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
+
+
+  <!-- Modify the build process to add Tycho and configure some utility plug-ins. -->
+  <build>
+ 
+    <plugins>
+
+      <!-- We need tycho to build eclipse plugins -->
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+
+      <!-- Setup our target platform for the build -->
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <target>
+            <artifact>
+              <groupId>org.eclipse.elk</groupId>
+              <artifactId>org.eclipse.elk.targetplatform</artifactId>
+              <version>${elk-version}</version>
+            </artifact>
+          </target>
+          <environments>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>macosx</os>
+              <ws>cocoa</ws>
+              <arch>x86_64</arch>
+            </environment>
+          </environments>
+        </configuration>
+      </plugin>
+
+      <!-- Build source plugin bundles -->
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-source-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <executions>
+          <execution>
+            <id>plugin-source</id>
+            <goals>
+              <goal>plugin-source</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Enable Java assertions during JUnit test runs. -->
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-surefire-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <enableAssertions>true</enableAssertions>
+          <!-- There seems to be an issue with executing several tests in parallel in that
+               it can happen that failed tests are eventually reported as having succeeded.
+               A resolution is to set forkCount=1 and reuseForks=false
+               See, e.g. the following stackoverflow post:
+               https://stackoverflow.com/questions/3365628/junit-tests-pass-in-eclipse-but-fail-in-maven-surefire -->
+          <!-- parallel>classes</parallel -->
+          <!-- threadCount>4</threadCount -->
+          <reuseForks>false</reuseForks>
+          <forkCount>1</forkCount>
+          <excludes>
+            <exclude>**/TestUtil.java</exclude>
+          </excludes>
+          <systemProperties>
+            <ELK_REPO>${tests.paths.elk-repo}</ELK_REPO>
+            <MODELS_REPO>${tests.paths.models-repo}</MODELS_REPO>
+          </systemProperties>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+ 	<pluginManagement>   
+      <plugins>
+
+        <!--  Compile MELK files to options classes -->
+        <plugin>
+          <groupId>org.eclipse.xtext</groupId>
+          <artifactId>xtext-maven-plugin</artifactId>
+          <version>${xtext-version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <languages>
+              <language>
+                <setup>org.eclipse.elk.core.meta.MetaDataStandaloneSetup</setup>
+                <outputConfigurations>
+                  <outputConfiguration>
+                    <outputDirectory>${basedir}/src-gen/</outputDirectory>
+                  </outputConfiguration>
+                </outputConfigurations>
+              </language>
+            </languages>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.eclipse.elk</groupId>
+              <artifactId>org.eclipse.elk.graph</artifactId>
+              <version>[${elk-version}]</version>
+            </dependency>
+            <dependency>
+              <groupId>org.eclipse.elk</groupId>
+              <artifactId>org.eclipse.elk.core.meta</artifactId>
+              <version>[${elk-version}]</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+
+        <!-- Maven Xtend plugin to tell maven how to compile Xtend code -->
+        <plugin>
+          <groupId>org.eclipse.xtend</groupId>
+          <artifactId>xtend-maven-plugin</artifactId>
+          <version>${xtext-version}</version>
+          <configuration>
+            <outputDirectory>${basedir}/xtend-gen</outputDirectory>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!-- Add src-gen and xtend-gen to source-directories -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.3</version>
+          <executions>
+            <execution>
+              <id>add-source</id>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>add-source</goal>
+              </goals>
+              <configuration>
+                <sources>
+                  <source>src-gen</source>
+                  <source>${project.build.directory}/xtend-gen</source>
+                </sources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!-- Generated code needs cleanup too -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.0.0</version>
+          <configuration>
+            <filesets>
+              <fileset>
+                <directory>xtend-gen</directory>
+                <includes>
+                  <include>**</include>
+                </includes>
+              </fileset>
+            </filesets>
+          </configuration>
+        </plugin>
+
+        <!-- Child projects may use this to be exempted from inclusion in the Maven repository -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+    
+        <!-- Configure Eclipse m2e to ignore certain plugin goals when integrating Maven build
+             settings into Eclipse. -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-compiler-plugin</artifactId>
+                    <versionRange>${tycho-version}</versionRange>
+                    <goals>
+                      <goal>compile</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-packaging-plugin</artifactId>
+                    <versionRange>${tycho-version}</versionRange>
+                    <goals>
+                      <goal>build-qualifier</goal>
+                      <goal>build-qualifier-aggregator</goal>
+                      <goal>validate-id</goal>
+                      <goal>validate-version</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <versionRange>[3.0.0,)</versionRange>
+                    <goals>
+                      <goal>clean</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+
+      </plugins>
+    </pluginManagement>
+  </build>
+
+
+  <!-- Maven plugin repositories -->
+  <pluginRepositories>
+    <pluginRepository>
+      <id>central</id>
+      <name>Maven Plugin Repository</name>
+      <url>https://repo.maven.apache.org/maven2</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+
+    <pluginRepository>
+      <id>eclipse-cbi</id>
+      <name>Eclipse Common Build Infrastructure Maven Repository</name>
+      <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
+    </pluginRepository>
+
+    <pluginRepository>
+      <id>eclipse-elk-meta</id>
+      <name>ELK Meta Data Language Compiler Maven Repository</name>
+      <url>${elkMeta.repositoryUrl}</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+
+  <!-- Information about where the ELK code lives. -->
+  <scm>
+    <connection>scm:git:git://github.com/eclipse/elk.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:eclipse/elk.git</developerConnection>
+    <url>https://github.com/eclipse/elk</url>
+  </scm>
+
+
+  <!-- The license ELK is available as. -->
+  <licenses>
+    <license>
+      <name>Eclipse Public License - v 1.0</name>
+      <url>https://www.eclipse.org/legal/epl-v10.html</url>
+    </license>
+  </licenses>
+
+
+  <!-- Our developers. -->
+  <developers>
+    <developer>
+      <id>christoph.schulze</id>
+      <name>Christoph Daniel Schulze</name>
+      <email>cds@informatik.uni-kiel.de</email>
+      <organization>Kiel University</organization>
+      <organizationUrl>https://www.rtsys.informatik.uni-kiel.de/</organizationUrl>
+      <roles>
+        <role>project lead</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <id>ulf.rueegg</id>
+      <name>Ulf Rüegg</name>
+      <email>uru@informatik.uni-kiel.de</email>
+      <organization>Kiel University</organization>
+      <organizationUrl>https://www.rtsys.informatik.uni-kiel.de/</organizationUrl>
+    </developer>
+
+    <developer>
+      <id>miro.spoenemann</id>
+      <name>Miro Spönemann</name>
+      <email>miro.spoenemann@typefox.io</email>
+      <organization>TypeFox</organization>
+      <organizationUrl>https://typefox.io</organizationUrl>
+    </developer>
+  </developers>
+
+</project>
