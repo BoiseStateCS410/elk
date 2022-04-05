@@ -1,0 +1,12 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue Apr 05 13:03:11 MDT 2022
+@default-eclipse-elk-meta-${elkMeta.repositoryUrl}/.lastUpdated=1649181617690
+@https\://repo.maven.apache.org/maven2/org/eclipse/elk/\:8080>@default-central-https\://repo1.maven.org/maven2/.lastUpdated=1649181617678
+@mvnrepository.com/artifact/org.eclipse.elk\:8080>@default-central-https\://repo1.maven.org/maven2/.lastUpdated=1649175079290
+file\://c\:\\Users\\mklnt\\.p22\\tycho/.error=
+${elkMeta.repositoryUrl}/.error=Could not transfer artifact org.eclipse.tycho\:tycho-maven-plugin\:pom\:1.6.0 from/to eclipse-elk-meta (${elkMeta.repositoryUrl})\: Cannot access ${elkMeta.repositoryUrl} with type default using the available connector factories\: BasicRepositoryConnectorFactory
+file\://c\:\\Users\\mklnt\\.p22\\tycho/.lastUpdated=1649174923078
+@mvnrepository.com/artifact/org.eclipse.elk\:8080>@default-eclipse-cbi-https\://repo.eclipse.org/content/repositories/cbi-releases/.lastUpdated=1649175079300
+@https\://repo.maven.apache.org/maven2/org/eclipse/elk/\:8080>@default-eclipse-cbi-https\://repo.eclipse.org/content/repositories/cbi-releases/.lastUpdated=1649181617689
+https\://repo1.maven.org/maven2/.lastUpdated=1649185391084
+https\://repo.eclipse.org/content/repositories/cbi-releases/.error=Could not transfer artifact org.eclipse.tycho\:tycho-maven-plugin\:pom\:1.6.0 from/to eclipse-cbi (https\://repo.eclipse.org/content/repositories/cbi-releases/)\: transfer failed for https\://repo.eclipse.org/content/repositories/cbi-releases/org/eclipse/tycho/tycho-maven-plugin/1.6.0/tycho-maven-plugin-1.6.0.pom, proxy\: ProxyInfo{host\='https\://repo.maven.apache.org/maven2/org/eclipse/elk/', userName\='null', port\=8080, type\='https', nonProxyHosts\='null'}
