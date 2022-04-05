@@ -152,6 +152,7 @@
 
   <!-- Modify the build process to add Tycho and configure some utility plug-ins. -->
   <build>
+ 
     <plugins>
 
       <!-- We need tycho to build eclipse plugins -->
@@ -238,7 +239,7 @@
 
     </plugins>
 
-    <pluginManagement>
+ 	<pluginManagement>   
       <plugins>
 
         <!--  Compile MELK files to options classes -->
