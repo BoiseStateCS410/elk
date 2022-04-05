@@ -12,8 +12,8 @@
   </artifact>
   <artifact classifier='osgi.bundle' id='org.eclipse.elk.core.meta.source' version='0.7.1'>
     <properties size='6'>
-      <property name='artifact.size' value='337539'/>
-      <property name='download.size' value='337539'/>
+      <property name='artifact.size' value='337540'/>
+      <property name='download.size' value='337540'/>
       <property name='maven-groupId' value='org.eclipse.elk'/>
       <property name='maven-artifactId' value='org.eclipse.elk.core.meta'/>
       <property name='maven-version' value='0.7.1'/>
