@@ -61,10 +61,12 @@
           <groupId>org.eclipse.platform</groupId>
           <artifactId>org.eclipse.urischeme</artifactId>
         </exclusion>
+<!-- Exclude this exclusion: it prevents this module from working correctly
         <exclusion>
           <groupId>javax.annotation</groupId>
           <artifactId>javax.annotation-api</artifactId>
         </exclusion>
+-->
       </exclusions>
       <!-- transitively pulls 'org.eclipse.jface', too,
              defining e.g. 'org.eclipse.jface.preference.IPreferenceStore' -->
