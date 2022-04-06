@@ -277,6 +277,7 @@
               <artifactId>org.eclipse.elk.core.meta</artifactId>
               <version>[${elk-version}]</version>
             </dependency>
+           	
           </dependencies>
         </plugin>
 
@@ -344,6 +345,9 @@
     
         <!-- Configure Eclipse m2e to ignore certain plugin goals when integrating Maven build
              settings into Eclipse. -->
+        <!-- see this note to resolve the warning about the lifecycle-mapping warning
+            https://www.eclipse.org/m2e/documentation/release-notes-17.html#new-syntax-for-specifying-lifecycle-mapping-metadata
+         -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
@@ -397,11 +401,33 @@
             </lifecycleMappingMetadata>
           </configuration>
         </plugin>
-
+        
+		<plugin>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>31.1-jre</version>
+		</plugin>
+       
+		<plugin>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>5.1.0</version>
+			<dependencies>
+				<dependency>
+					<exclusions>
+						<!--  excluding guava so it can be updated -->
+						<exclusion>
+							<groupId>com.google.guava</groupId>
+							<artifactId>guava</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</plugin>        
+		
       </plugins>
     </pluginManagement>
   </build>
-
 
   <!-- Maven plugin repositories -->
   <pluginRepositories>
