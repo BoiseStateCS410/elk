@@ -46,10 +46,12 @@
     	<artifactId>jakarta.annotation-api</artifactId>
     	<version>2.0.0</version>
     </dependency>
+<!-- To fix the javax.annotation issue increase the version of the workbench -->
+<!-- The original value is 3.110.0: updating to 3.111.0 -->
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.ui.workbench</artifactId>
-      <version>3.110.0</version>
+      <version>3.111.0</version>
       <exclusions>
         <!-- exclude org.eclipse.swt here, as that in turn depends on "org.eclipse.platform:org.eclipse.swt.${osgi.platform}";
                that construction is prone to result in build troubles. -->
