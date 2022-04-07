@@ -14,7 +14,7 @@
   <groupId>org.eclipse.elk</groupId>
   <name>Eclipse Layout Kernel</name>
   <url>https://www.eclipse.org/elk/</url>
-  <version>0.7.1</version>
+  <version>0.7.3</version>
   <description>An infrastructure for automatic graph layout and implementations of different layout algorithms.</description>
   <packaging>pom</packaging>
 
@@ -66,8 +66,8 @@
         <module>../plugins/org.eclipse.elk.graph</module>
         <module>../plugins/org.eclipse.elk.core.meta</module>
       </modules>
-
-      <!-- The meta data language compiler gets pushed to a Maven repository. -->
+<!-- Commented out per update for 0.8.0 -->
+<!-- The meta data language compiler gets pushed to a Maven repository.
       <distributionManagement>
         <repository>
           <id>elk-meta-repository</id>
@@ -79,6 +79,7 @@
 
         <downloadUrl>${elkMeta.repositoryUrl}</downloadUrl>
       </distributionManagement>
+-->
     </profile>
 
     <!-- Activate to have the generated artifacts signed by Eclipse. -->
@@ -462,12 +463,13 @@
       <name>Eclipse Common Build Infrastructure Maven Repository</name>
       <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
     </pluginRepository>
-
+<!--
     <pluginRepository>
       <id>eclipse-elk-meta</id>
       <name>ELK Meta Data Language Compiler Maven Repository</name>
       <url>${elkMeta.repositoryUrl}</url>
     </pluginRepository>
+-->
   </pluginRepositories>
 
 
