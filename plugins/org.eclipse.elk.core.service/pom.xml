@@ -9,81 +9,82 @@
   SPDX-License-Identifier: EPL-2.0
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.eclipse.elk</groupId>
-    <artifactId>parent</artifactId>
-    <version>0.7.1</version>
-    <relativePath>../../build/pom.xml</relativePath>
-  </parent>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.eclipse.elk</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.7.1</version>
+		<relativePath>../../build/pom.xml</relativePath>
+	</parent>
+	<!-- updated version -->
+	<groupId>org.eclipse.elk</groupId>
+	<artifactId>org.eclipse.elk.core.service</artifactId>
+	<name>ELK Layout Service Layer</name>
+	<version>0.7.3</version>
+	<description>ELK Service integrates layout computations into Eclipse-based IDEs (async execution, progress reporting, etc.).</description>
+	<packaging>eclipse-plugin</packaging>
 
-  <groupId>org.eclipse.elk</groupId>
-  <artifactId>org.eclipse.elk.core.service</artifactId>
-  <name>ELK Layout Service Layer</name>
-  <version>0.7.1</version>
-  <description>ELK Service integrates layout computations into Eclipse-based IDEs (async execution, progress reporting, etc.).</description>
-  <packaging>eclipse-plugin</packaging>
-
-  <dependencies>
+	<dependencies>
+		<!-- depend on the version assembled in build/pom.xml
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
-<!--      <version>3.0</version> -->
+      <version>3.0</version>  original version commented out
 	  <version>5.1.0</version>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.elk</groupId>
-      <artifactId>org.eclipse.elk.core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.platform</groupId>
-      <artifactId>org.eclipse.core.runtime</artifactId>
-      <version>3.13.0</version>
-    </dependency>
-    <dependency>
-    	<groupId>jakarta.annotation</groupId>
-    	<artifactId>jakarta.annotation-api</artifactId>
-    	<version>2.0.0</version>
-    </dependency>
-<!-- Added this dependency also to deal with javax.annotation issue -->
-    <dependency> 
-    	<groupId>jakarta.xml.bind</groupId>
-    	<artifactId>jakarta.xml.bind-api</artifactId>
-    	<version>2.3.3</version>
-	</dependency>
-<!-- To fix the javax.annotation issue increase the version of the workbench -->
-<!-- The original value is 3.110.0: updating to 3.111.0 -->
-    <dependency>
-      <groupId>org.eclipse.platform</groupId>
-      <artifactId>org.eclipse.ui.workbench</artifactId>
-      <version>3.111.0</version>
-      <exclusions>
-        <!-- exclude org.eclipse.swt here, as that in turn depends on "org.eclipse.platform:org.eclipse.swt.${osgi.platform}";
+-->
+		<dependency>
+			<groupId>org.eclipse.elk</groupId>
+			<artifactId>org.eclipse.elk.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.platform</groupId>
+			<artifactId>org.eclipse.core.runtime</artifactId>
+			<version>3.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<!-- Added this dependency also to deal with javax.annotation issue -->
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>2.3.3</version>
+		</dependency>
+		<!-- To fix the javax.annotation issue increase the version of the workbench -->
+		<!-- The original value is 3.110.0: updating to 3.111.0 -->
+		<dependency>
+			<groupId>org.eclipse.platform</groupId>
+			<artifactId>org.eclipse.ui.workbench</artifactId>
+			<version>3.111.0</version>
+			<exclusions>
+				<!-- exclude org.eclipse.swt here, as that in turn depends on "org.eclipse.platform:org.eclipse.swt.${osgi.platform}";
                that construction is prone to result in build troubles. -->
-        <exclusion>
-          <groupId>org.eclipse.platform</groupId>
-          <artifactId>org.eclipse.swt</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.platform</groupId>
-          <artifactId>org.eclipse.urischeme</artifactId>
-        </exclusion>
-<!-- Exclude this exclusion: it prevents this module from working correctly -->
-<!-- Exclusion returned because other fixes are not working -->
-        <exclusion>
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
-
-      </exclusions>
-      <!-- transitively pulls 'org.eclipse.jface', too,
+				<exclusion>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.urischeme</artifactId>
+				</exclusion>
+				<!-- Exclude this exclusion: it prevents this module from working correctly -->
+				<!-- Exclusion returned because other fixes are not working -->
+				<exclusion>
+					<groupId>javax.annotation</groupId>
+					<artifactId>javax.annotation-api</artifactId>
+				</exclusion>
+			</exclusions>
+			<!-- transitively pulls 'org.eclipse.jface', too,
              defining e.g. 'org.eclipse.jface.preference.IPreferenceStore' -->
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.emf</groupId>
-      <artifactId>org.eclipse.emf.edit</artifactId>
-      <version>2.12.0</version>
-    </dependency>
-  </dependencies>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.edit</artifactId>
+			<version>2.12.0</version>
+		</dependency>
+	</dependencies>
 </project>
