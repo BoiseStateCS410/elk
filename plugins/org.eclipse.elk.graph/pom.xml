@@ -18,12 +18,14 @@
   </parent>
 
   <dependencies>
+  <!-- Guava will be provided in the build\pom.xml
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-<!--      <version>[15.0,)</version> -->
+prior comment      <version>[15.0,)</version> 
       <version>31.1-jre</version>
     </dependency>
+-->
     <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.common</artifactId>
@@ -35,11 +37,11 @@
       <version>2.12.0</version>
     </dependency>
   </dependencies>
-
+<!-- version updated -->
   <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.graph</artifactId>
   <name>ELK Graph Model</name>
-  <version>0.7.1</version>
+  <version>0.7.3</version>
   <description>The ELK Graph is the central data structure of the Eclipse Layout Kernel.</description>
   <packaging>eclipse-plugin</packaging>
 </project>
