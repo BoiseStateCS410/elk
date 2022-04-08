@@ -41,7 +41,7 @@ prior comment      <version>[15.0,)</version>
   <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.graph</artifactId>
   <name>ELK Graph Model</name>
-  <version>0.7.3</version>
+  <version>0.7.1</version>
   <description>The ELK Graph is the central data structure of the Eclipse Layout Kernel.</description>
   <packaging>eclipse-plugin</packaging>
 </project>
