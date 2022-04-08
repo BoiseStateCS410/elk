@@ -16,26 +16,32 @@
     <version>0.7.1</version>
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
-
+<!-- version updated -->
   <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.alg.graphviz.dot</artifactId>
   <name>ELK Graphviz Dot Language Parser</name>
-  <version>0.7.1</version>
+  <version>0.7.3</version>
   <description>Support for the Graphviz Dot language.</description>
   <packaging>eclipse-plugin</packaging>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.eclipse.elk</groupId>
-      <artifactId>org.eclipse.elk.core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.xtext</groupId>
-      <artifactId>org.eclipse.xtext</artifactId>
-      <version>${xtext-version}</version>
-    </dependency>
-  </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.elk</groupId>
+			<artifactId>org.eclipse.elk.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.xtext</groupId>
+			<artifactId>org.eclipse.xtext</artifactId>
+			<version>${xtext-version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.xtext</groupId>
+					<artifactId>org.eclipse.xtext.xbase.lib</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
 
   <build>
     <sourceDirectory>src</sourceDirectory>
